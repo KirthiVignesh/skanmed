@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_remix/flutter_remix.dart';
 
 class MapDisp extends StatefulWidget {
   const MapDisp({super.key});
@@ -59,16 +60,20 @@ class _MapDispState extends State<MapDisp> {
           _controller.complete(controller);
         },
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-        Position position = await _determinePosition();
-        final GoogleMapController controller = await _controller.future;
-        controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-            target: LatLng(
-              position.latitude,
-              position.longitude,
-            ),
-            zoom: 14.4746)));
-      }),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(FlutterRemix.user_location_line),
+          onPressed: () async {
+            Position position = await _determinePosition();
+            final GoogleMapController controller = await _controller.future;
+            controller
+                .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+                    target: LatLng(
+                      position.latitude,
+                      position.longitude,
+                    ),
+                    zoom: 14.4746)));
+          }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 }
