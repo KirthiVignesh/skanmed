@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "542725343091",
+    "project_id": "skanmed-14b16",
+    "storage_bucket": "skanmed-14b16.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542725343091:android:a305504a97c0cdf782a706",
+        "android_client_info": {
+          "package_name": "com.example.skanmed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542725343091-bp6so5ekthle2l31ue9dtkktka4jslij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDskhyUm_zYVmF-WQSIPUKzyxfK8287fKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542725343091-bp6so5ekthle2l31ue9dtkktka4jslij.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
