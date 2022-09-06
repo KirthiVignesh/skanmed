@@ -60,6 +60,14 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(
+            FlutterRemix.arrow_left_line,
+            color: Colors.black,
+            size: 32,
+          ),
+        ),
         toolbarHeight: 80,
         actions: [
           Padding(
