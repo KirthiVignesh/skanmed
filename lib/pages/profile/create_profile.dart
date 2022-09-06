@@ -16,6 +16,8 @@ class CreateProfile extends StatefulWidget {
 class _CreateProfileState extends State<CreateProfile> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
+  final _numberController = TextEditingController();
+  final _cityController = TextEditingController();
   final user = FirebaseAuth.instance.currentUser!;
   @override
   void initState() {
@@ -26,6 +28,7 @@ class _CreateProfileState extends State<CreateProfile> {
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
+    _numberController.dispose();
     super.dispose();
   }
 
@@ -44,11 +47,19 @@ class _CreateProfileState extends State<CreateProfile> {
     });
   }
 
-  void newProfile({String fName = "", String lName = "", int age = 0}) {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .set({'first_name': fName, 'last_name': lName, 'age': age});
+  void newProfile(
+      {String fName = "",
+      String lName = "",
+      int age = 0,
+      String number = "",
+      String city = ""}) {
+    FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+      'first_name': fName,
+      'last_name': lName,
+      'age': age,
+      'number': number,
+      'city': city,
+    });
   }
 
   Widget build(BuildContext context) {
@@ -67,7 +78,7 @@ class _CreateProfileState extends State<CreateProfile> {
                   fontSize: 30,
                 )),
             SizedBox(height: 30),
-            //e-mail
+            //fname
             SizedBox(
               child: Padding(
                 padding:
@@ -82,14 +93,14 @@ class _CreateProfileState extends State<CreateProfile> {
                           borderSide: BorderSide(color: Colors.indigo),
                           borderRadius: BorderRadius.circular(12)),
                       hintText: _userDetails?['first_name'] == null
-                          ? 'Enter First Name'
+                          ? 'First Name'
                           : _userDetails!['first_name'],
                       fillColor: Colors.white,
                       filled: true),
                 ),
               ),
             ),
-            //password
+            //lname
             SizedBox(
               child: Padding(
                 padding:
@@ -104,8 +115,52 @@ class _CreateProfileState extends State<CreateProfile> {
                           borderSide: BorderSide(color: Colors.indigo),
                           borderRadius: BorderRadius.circular(12)),
                       hintText: _userDetails?['last_name'] == null
-                          ? 'Enter Last Name'
+                          ? 'Last Name'
                           : _userDetails!['last_name'],
+                      fillColor: Colors.white,
+                      filled: true),
+                ),
+              ),
+            ),
+            //number
+            SizedBox(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: TextField(
+                  controller: _numberController,
+                  decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(12)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.indigo),
+                          borderRadius: BorderRadius.circular(12)),
+                      hintText: _userDetails?['number'] == null
+                          ? 'Mobile Number'
+                          : _userDetails!['number'],
+                      fillColor: Colors.white,
+                      filled: true),
+                ),
+              ),
+            ),
+            //City
+            SizedBox(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: TextField(
+                  controller: _cityController,
+                  decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(12)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.indigo),
+                          borderRadius: BorderRadius.circular(12)),
+                      hintText: _userDetails?['city'] == null
+                          ? 'City'
+                          : _userDetails!['city'],
                       fillColor: Colors.white,
                       filled: true),
                 ),
@@ -162,13 +217,16 @@ class _CreateProfileState extends State<CreateProfile> {
                 child: ElevatedButton(
                   onPressed: () {
                     newProfile(
-                        fName: _firstNameController.text.trim() == ''
-                            ? _userDetails!['first_name']
-                            : _firstNameController.text.trim(),
-                        lName: _lastNameController.text.trim() == ''
-                            ? _userDetails!['last_name']
-                            : _lastNameController.text.trim(),
-                        age: _ageController);
+                      fName: _firstNameController.text.trim() == ''
+                          ? _userDetails!['first_name']
+                          : _firstNameController.text.trim(),
+                      lName: _lastNameController.text.trim() == ''
+                          ? _userDetails!['last_name']
+                          : _lastNameController.text.trim(),
+                      age: _ageController,
+                      number: _numberController.text.trim(),
+                      city: _cityController.text.trim(),
+                    );
                     var snackBar = SnackBar(
                       elevation: 0,
                       behavior: SnackBarBehavior.floating,

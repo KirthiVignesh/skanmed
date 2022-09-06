@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:slide_to_act/slide_to_act.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _getUserDetails();
   }
 
-  bool _availStatus = true;
+  // bool _availStatus = true;
 
   final user = FirebaseAuth.instance.currentUser!;
   Map<String, dynamic>? _userDetails;
@@ -38,13 +39,11 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  Future changeAvail() async {
-    setState() {
-      _availStatus = !_availStatus;
-    }
-
-    print(_availStatus);
-  }
+  // Future changeAvail() async {
+  //   setState() {
+  //     _availStatus = !_availStatus;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -145,26 +144,29 @@ class _ProfilePageState extends State<ProfilePage> {
                       SizedBox(height: 20),
                       Row(
                         children: [
-                          Icon(FlutterRemix.mail_line, size: 20),
+                          Icon(FlutterRemix.mail_fill, size: 20),
                           SizedBox(width: 5),
                           Text('${user.email}', style: TextStyle(fontSize: 16))
                         ],
                       ),
-                      SizedBox(height: 30),
-                      Text(_availStatus ? "Available" : "Unavailable"),
-                      // ActionSlider.standard(
-                      //   child: const Text("Slide to change Status"),
-                      //   rolling: true,
-                      //   sliderBehavior: SliderBehavior.stretch,
-                      //   successIcon: Icon(FlutterRemix.aliens_fill),
-                      //   action: (controller) async {
-                      //     controller.loading(); //starts loading animation
-                      //     await changeAvail();
-                      //     controller.success(); //starts success animation
-                      //     await Future.delayed(const Duration(seconds: 1));
-                      //     controller.reset(); //resets the slider
-                      //   },
-                      // )
+                      SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Icon(FlutterRemix.phone_fill),
+                          SizedBox(width: 5),
+                          Text('${_userDetails?['number']}',
+                              style: TextStyle(fontSize: 16))
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Icon(FlutterRemix.map_pin_2_fill),
+                          SizedBox(width: 5),
+                          Text('${_userDetails?['city']}',
+                              style: TextStyle(fontSize: 16))
+                        ],
+                      ),
                     ],
                   ),
                 ),
