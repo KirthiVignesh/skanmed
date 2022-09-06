@@ -64,7 +64,7 @@ dev_dependencies:
   awesome_number_picker : 0.0.4 
   lottie: ^1.4.2
   cool_alert :
-  action_slider:
+  google_maps_flutter:
 
 
 # For information on the generic Dart part of this file, see the

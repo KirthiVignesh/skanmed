@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:action_slider/action_slider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -145,19 +144,19 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       SizedBox(height: 30),
                       Text(_availStatus ? "Available" : "Unavailable"),
-                      ActionSlider.standard(
-                        child: const Text("Slide to change Status"),
-                        rolling: true,
-                        sliderBehavior: SliderBehavior.stretch,
-                        successIcon: Icon(FlutterRemix.aliens_fill),
-                        action: (controller) async {
-                          controller.loading(); //starts loading animation
-                          await changeAvail();
-                          controller.success(); //starts success animation
-                          await Future.delayed(const Duration(seconds: 1));
-                          controller.reset(); //resets the slider
-                        },
-                      )
+                      // ActionSlider.standard(
+                      //   child: const Text("Slide to change Status"),
+                      //   rolling: true,
+                      //   sliderBehavior: SliderBehavior.stretch,
+                      //   successIcon: Icon(FlutterRemix.aliens_fill),
+                      //   action: (controller) async {
+                      //     controller.loading(); //starts loading animation
+                      //     await changeAvail();
+                      //     controller.success(); //starts success animation
+                      //     await Future.delayed(const Duration(seconds: 1));
+                      //     controller.reset(); //resets the slider
+                      //   },
+                      // )
                     ],
                   ),
                 ),
