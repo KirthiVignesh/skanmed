@@ -35,37 +35,39 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        minimum: EdgeInsets.all(8),
-        child: Stack(
-          alignment: AlignmentDirectional.topCenter,
-          children: [
-            Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: MapDisp()),
-            IconButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      return ProfilePage();
-                    },
-                  ));
-                },
-                icon: Icon(FlutterRemix.user_3_line)),
-
-            //SizedBox.expand(),
-            Text(
-              "Home",
-              style: TextStyle(
-                fontSize: 34,
-                fontWeight: FontWeight.bold,
+    return Stack(
+      children: [
+        MapDisp(),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20.0, 50, 20, 20),
+          child: Align(
+            alignment: Alignment.topRight,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfilePage(),
+                    ));
+              },
+              child: Container(
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey,
+                        blurRadius: 5,
+                      )
+                    ]),
+                child: Icon(FlutterRemix.user_3_fill),
               ),
             ),
-          ],
-        ),
-      ),
+          ),
+        )
+      ],
     );
   }
 }
