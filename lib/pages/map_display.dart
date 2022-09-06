@@ -13,8 +13,13 @@ class MapDisp extends StatefulWidget {
 }
 
 class _MapDispState extends State<MapDisp> {
+  void initState() {
+    super.initState();
+    _determinePosition();
+  }
+
   Completer<GoogleMapController> _controller = Completer();
-  Position? position;
+
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -40,24 +45,30 @@ class _MapDispState extends State<MapDisp> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height - 200,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          child: GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition: CameraPosition(
-              target: sourceLocation,
-              zoom: 14.4746,
-            ),
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-          ),
+    return Scaffold(
+      body: GoogleMap(
+        mapType: MapType.normal,
+        initialCameraPosition: CameraPosition(
+          // target: position == null
+          //     ? LatLng(0.0, 0.0)
+          //     : LatLng(position!.latitude, position!.longitude),
+          target: LatLng(0.0, 0.0),
+          zoom: 14.4746,
         ),
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
       ),
+      floatingActionButton: FloatingActionButton(onPressed: () async {
+        Position position = await _determinePosition();
+        final GoogleMapController controller = await _controller.future;
+        controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+            target: LatLng(
+              position.latitude,
+              position.longitude,
+            ),
+            zoom: 14.4746)));
+      }),
     );
   }
 }

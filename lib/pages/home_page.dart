@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
+import 'package:skanmed/pages/map_display.dart';
 import 'package:skanmed/pages/profile_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,39 +35,35 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(14.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: IconButton(
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (context) {
-                              return ProfilePage();
-                            },
-                          ));
-                        },
-                        icon: Icon(FlutterRemix.user_3_line)),
-                  ),
-                  SizedBox.expand(),
-                  Text(
-                    "Home",
-                    style: TextStyle(
-                      fontSize: 34,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+    return Scaffold(
+      body: SafeArea(
+        minimum: EdgeInsets.all(8),
+        child: Stack(
+          alignment: AlignmentDirectional.topCenter,
+          children: [
+            Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: MapDisp()),
+            IconButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return ProfilePage();
+                    },
+                  ));
+                },
+                icon: Icon(FlutterRemix.user_3_line)),
+
+            //SizedBox.expand(),
+            Text(
+              "Home",
+              style: TextStyle(
+                fontSize: 34,
+                fontWeight: FontWeight.bold,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
