@@ -29,6 +29,7 @@ class _CreateProfileState extends State<CreateProfile> {
     _firstNameController.dispose();
     _lastNameController.dispose();
     _numberController.dispose();
+    _cityController.dispose();
     super.dispose();
   }
 
@@ -217,16 +218,19 @@ class _CreateProfileState extends State<CreateProfile> {
                 child: ElevatedButton(
                   onPressed: () {
                     newProfile(
-                      fName: _firstNameController.text.trim() == ''
-                          ? _userDetails!['first_name']
-                          : _firstNameController.text.trim(),
-                      lName: _lastNameController.text.trim() == ''
-                          ? _userDetails!['last_name']
-                          : _lastNameController.text.trim(),
-                      age: _ageController,
-                      number: _numberController.text.trim(),
-                      city: _cityController.text.trim(),
-                    );
+                        fName: _firstNameController.text.trim() == ''
+                            ? _userDetails!['first_name']
+                            : _firstNameController.text.trim(),
+                        lName: _lastNameController.text.trim() == ''
+                            ? _userDetails!['last_name']
+                            : _lastNameController.text.trim(),
+                        age: _ageController,
+                        number: _numberController.text.trim() == ''
+                            ? _userDetails!['number']
+                            : _numberController.text.trim(),
+                        city: _cityController.text.trim() == ''
+                            ? _userDetails!['city']
+                            : _cityController.text.trim());
                     var snackBar = SnackBar(
                       elevation: 0,
                       behavior: SnackBarBehavior.floating,

@@ -51,8 +51,8 @@ class _HomePageState extends State<HomePage> {
                     ));
               },
               child: Container(
-                height: 60,
-                width: 60,
+                height: 55,
+                width: 55,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     color: Colors.white,
