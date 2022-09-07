@@ -16,22 +16,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState;
-    _getUserDetails();
   }
 
-  final user = FirebaseAuth.instance.currentUser!;
-  Map<String, dynamic>? _userDetails;
-  Future<void> _getUserDetails() async {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .get()
-        .then((value) {
-      setState(() {
-        _userDetails = value.data();
-      });
-    });
-  }
+  bool isTrue = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +53,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

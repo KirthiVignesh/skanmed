@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -29,6 +30,7 @@ class _MapDispState extends State<MapDisp> {
   initMarker(request) {
     var p = request['lat'];
     var markerIdVal = request['name'];
+    bool isPresent = request['isPresent'];
     final MarkerId markerId = MarkerId(markerIdVal);
     final Marker marker = Marker(
         markerId: markerId,
@@ -101,8 +103,9 @@ class _MapDispState extends State<MapDisp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GoogleMap(
+    return Stack(alignment: Alignment.bottomCenter, children: [
+      GoogleMap(
+        myLocationEnabled: true,
         zoomControlsEnabled: false,
         markers: Set.of(_markers.values),
         mapType: MapType.normal,
@@ -118,30 +121,45 @@ class _MapDispState extends State<MapDisp> {
           _controller.complete(controller);
         },
       ),
-      floatingActionButton: FloatingActionButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          backgroundColor: Colors.white,
-          child: Icon(
-            FlutterRemix.user_location_line,
-            color: Colors.black,
-          ),
-          onPressed: () async {
-            Position position = await _determinePosition();
-            final GoogleMapController controller = await _controller.future;
-            await _populateMarks();
-            print(_markers);
-            //print(_hospitalData);
-            controller
-                .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-                    target: LatLng(
-                      position.latitude,
-                      position.longitude,
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width - 50,
+          child: FloatingActionButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              backgroundColor: Colors.white,
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      FlutterRemix.user_location_line,
+                      color: Colors.black,
                     ),
-                    zoom: 14.4746)));
-          }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-    );
+                  ),
+                  Text(
+                    "Tap to get Data near your location",
+                    style: TextStyle(color: Colors.black),
+                  )
+                ],
+              ),
+              onPressed: () async {
+                Position position = await _determinePosition();
+                final GoogleMapController controller = await _controller.future;
+                await _populateMarks();
+                //print(_hospitalData);
+                controller.animateCamera(
+                    CameraUpdate.newCameraPosition(CameraPosition(
+                        target: LatLng(
+                          position.latitude,
+                          position.longitude,
+                        ),
+                        zoom: 14.4746)));
+              }),
+        ),
+      ),
+    ]);
   }
 }
