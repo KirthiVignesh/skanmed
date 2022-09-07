@@ -67,6 +67,8 @@ dev_dependencies:
   cool_alert :
   google_maps_flutter:
   geolocator:
+  google_maps_flutter_web:
+  url_launcher:
 
 
 # For information on the generic Dart part of this file, see the
