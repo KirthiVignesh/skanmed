@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_remix/flutter_remix.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class MapDisp extends StatefulWidget {
   const MapDisp({super.key});
@@ -20,36 +21,45 @@ class _MapDispState extends State<MapDisp> {
   void initState() {
     super.initState();
     _determinePosition();
-     }
+  }
+
   final user = FirebaseAuth.instance.currentUser!;
-  //Map<String, dynamic>? 
+  //Map<String, dynamic>?
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
-    initMarker(request) {
+  initMarker(request) {
     var p = request['lat'];
     var markerIdVal = request['name'];
     final MarkerId markerId = MarkerId(markerIdVal);
     final Marker marker = Marker(
         markerId: markerId,
-        position:
-            LatLng(p[0], p[1]),
+        position: LatLng(p[0], p[1]),
         infoWindow: InfoWindow(
           title: request['name'],
         ));
     setState(() {
       _markers[markerId] = marker;
-
     });
   }
-   Future _populateMarks() async{
+
+  Future _populateMarks() async {
     //initMarker({'name':'Example','lat':[10.851274920328036, 77.0527618629687]});
-    FirebaseFirestore.instance.collection('hospitals').get().then((QuerySnapshot doc){
-      if(doc.docs.isNotEmpty){
-        print(doc.docs[0].data);
-        for(int i = 0; i < doc.docs.length; i++){
-          initMarker(doc.docs[i].data);
-        }
-      }
-    });
+    print(FirebaseFirestore.instance.collection('hospitals').get());
+    // FirebaseFirestore.instance
+    //     .collection('hospitals')
+    //     .get()
+    //     .then((QuerySnapshot doc) {
+    //   if (doc.docs.isNotEmpty) {
+    //     for (int i = 0; i < doc.docs.length; i++) {
+    //       initMarker(doc.docs[i].data);
+    //     }
+    //   }
+    // });
+    FirebaseFirestore.instance
+        .collection('hospitals')
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              initMarker(element);
+            }));
   }
 
   Completer<GoogleMapController> _controller = Completer();
@@ -59,7 +69,19 @@ class _MapDispState extends State<MapDisp> {
     LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
+      var snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'An Error Occurred',
+          message:
+              'Location Services are disabled.\nPlease try Again with location enabled',
+          contentType: ContentType.failure,
+        ),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
 
     permission = await Geolocator.checkPermission();
@@ -84,7 +106,7 @@ class _MapDispState extends State<MapDisp> {
         zoomControlsEnabled: false,
         markers: Set.of(_markers.values),
         mapType: MapType.normal,
-         myLocationButtonEnabled: false,
+        myLocationButtonEnabled: false,
         initialCameraPosition: CameraPosition(
           // target: position == null
           //     ? LatLng(0.0, 0.0)
@@ -92,9 +114,8 @@ class _MapDispState extends State<MapDisp> {
           target: LatLng(143.2, 154.78),
           zoom: 14.4746,
         ),
-        onMapCreated: (GoogleMapController controller) async{
+        onMapCreated: (GoogleMapController controller) async {
           _controller.complete(controller);
-          await _populateMarks();
         },
       ),
       floatingActionButton: FloatingActionButton(
