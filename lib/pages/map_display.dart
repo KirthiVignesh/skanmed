@@ -48,6 +48,7 @@ class _MapDispState extends State<MapDisp> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GoogleMap(
+        zoomControlsEnabled: false,
         mapType: MapType.normal,
         initialCameraPosition: CameraPosition(
           // target: position == null
@@ -61,7 +62,14 @@ class _MapDispState extends State<MapDisp> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-          child: Icon(FlutterRemix.user_location_line),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          backgroundColor: Colors.white,
+          child: Icon(
+            FlutterRemix.user_location_line,
+            color: Colors.black,
+          ),
           onPressed: () async {
             Position position = await _determinePosition();
             final GoogleMapController controller = await _controller.future;
@@ -73,7 +81,7 @@ class _MapDispState extends State<MapDisp> {
                     ),
                     zoom: 14.4746)));
           }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
