@@ -14,9 +14,17 @@ class MapDisp extends StatefulWidget {
 }
 
 class _MapDispState extends State<MapDisp> {
+  List<Marker> markers = [];
+
   void initState() {
     super.initState();
     _determinePosition();
+    markers.add(Marker(
+        markerId: MarkerId('mymarker'),
+        draggable: false,
+        onTap: () => print('tapped'),
+        position: LatLng(0, 0),
+        infoWindow: InfoWindow()));
   }
 
   Completer<GoogleMapController> _controller = Completer();
@@ -49,11 +57,10 @@ class _MapDispState extends State<MapDisp> {
     return Scaffold(
       body: GoogleMap(
         zoomControlsEnabled: false,
+        myLocationButtonEnabled: false,
         mapType: MapType.normal,
+        markers: Set.from(markers),
         initialCameraPosition: CameraPosition(
-          // target: position == null
-          //     ? LatLng(0.0, 0.0)
-          //     : LatLng(position!.latitude, position!.longitude),
           target: LatLng(0.0, 0.0),
           zoom: 14.4746,
         ),
@@ -61,16 +68,10 @@ class _MapDispState extends State<MapDisp> {
           _controller.complete(controller);
         },
       ),
-      floatingActionButton: FloatingActionButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          backgroundColor: Colors.white,
-          child: Icon(
-            FlutterRemix.user_location_line,
-            color: Colors.black,
-          ),
-          onPressed: () async {
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        child: GestureDetector(
+          onTap: () async {
             Position position = await _determinePosition();
             final GoogleMapController controller = await _controller.future;
             controller
@@ -80,8 +81,28 @@ class _MapDispState extends State<MapDisp> {
                       position.longitude,
                     ),
                     zoom: 14.4746)));
-          }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          },
+          child: Container(
+            height: 55,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.green[800],
+            ),
+            child: Center(
+              child: Text(
+                'Find Hospitals',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
