@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MapDisp extends StatefulWidget {
   const MapDisp({super.key});
@@ -24,6 +25,7 @@ class _MapDispState extends State<MapDisp> {
     _determinePosition();
   }
 
+  bool _isHospitalSelected = false;
   final user = FirebaseAuth.instance.currentUser!;
   //Map<String, dynamic>?
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
@@ -33,10 +35,20 @@ class _MapDispState extends State<MapDisp> {
     bool isPresent = request['isPresent'];
     final MarkerId markerId = MarkerId(markerIdVal);
     final Marker marker = Marker(
+        icon: isPresent
+            ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)
+            : BitmapDescriptor.defaultMarker,
         markerId: markerId,
         position: LatLng(p[0], p[1]),
         infoWindow: InfoWindow(
           title: request['name'],
+          onTap: () {
+            launchUrl(Uri.parse("google.navigation:q=${p[0]},${p[1]}"));
+            setState(() {
+              _isHospitalSelected = !_isHospitalSelected;
+              _hospitalSelected = markerIdVal;
+            });
+          },
         ));
     setState(() {
       _markers[markerId] = marker;
@@ -44,18 +56,6 @@ class _MapDispState extends State<MapDisp> {
   }
 
   Future _populateMarks() async {
-    //initMarker({'name':'Example','lat':[10.851274920328036, 77.0527618629687]});
-    print(FirebaseFirestore.instance.collection('hospitals').get());
-    // FirebaseFirestore.instance
-    //     .collection('hospitals')
-    //     .get()
-    //     .then((QuerySnapshot doc) {
-    //   if (doc.docs.isNotEmpty) {
-    //     for (int i = 0; i < doc.docs.length; i++) {
-    //       initMarker(doc.docs[i].data);
-    //     }
-    //   }
-    // });
     FirebaseFirestore.instance
         .collection('hospitals')
         .get()
@@ -63,6 +63,8 @@ class _MapDispState extends State<MapDisp> {
               initMarker(element);
             }));
   }
+
+  String _hospitalSelected = '';
 
   Completer<GoogleMapController> _controller = Completer();
 
@@ -121,6 +123,12 @@ class _MapDispState extends State<MapDisp> {
           _controller.complete(controller);
         },
       ),
+      if (_isHospitalSelected)
+        Align(
+            alignment: Alignment.center,
+            child: Card(
+                color: Colors.indigoAccent,
+                child: Text("Selected ${_hospitalSelected}"))),
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
