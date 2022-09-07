@@ -117,13 +117,6 @@ class _MapDispState extends State<MapDisp> {
       GoogleMap(
         myLocationEnabled: true,
         zoomControlsEnabled: false,
-<<<<<<< HEAD
-        myLocationButtonEnabled: false,
-        mapType: MapType.normal,
-        markers: Set.from(markers),
-        initialCameraPosition: CameraPosition(
-          target: LatLng(0.0, 0.0),
-=======
         markers: Set.of(_markers.values),
         mapType: MapType.normal,
         myLocationButtonEnabled: false,
@@ -132,51 +125,12 @@ class _MapDispState extends State<MapDisp> {
           //     ? LatLng(0.0, 0.0)
           //     : LatLng(position!.latitude, position!.longitude),
           target: LatLng(143.2, 154.78),
->>>>>>> 525134ec183a9f3ff20c4c62968a5c8918e5bce1
           zoom: 14.4746,
         ),
         onMapCreated: (GoogleMapController controller) async {
           _controller.complete(controller);
         },
       ),
-<<<<<<< HEAD
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-        child: GestureDetector(
-          onTap: () async {
-            Position position = await _determinePosition();
-            final GoogleMapController controller = await _controller.future;
-            controller
-                .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-                    target: LatLng(
-                      position.latitude,
-                      position.longitude,
-                    ),
-                    zoom: 14.4746)));
-          },
-          child: Container(
-            height: 55,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.green[800],
-            ),
-            child: Center(
-              child: Text(
-                'Find Hospitals',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
-=======
       if (_isHospitalSelected)
         Align(
             alignment: Alignment.center,
@@ -223,6 +177,5 @@ class _MapDispState extends State<MapDisp> {
         ),
       ),
     ]);
->>>>>>> 525134ec183a9f3ff20c4c62968a5c8918e5bce1
   }
 }
