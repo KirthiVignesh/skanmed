@@ -24,7 +24,9 @@ class MapDisp extends StatefulWidget {
 class _MapDispState extends State<MapDisp> {
   List<Marker> markers = [];
   late List pos;
+  late List speciality;
   late bool isAvailable;
+  late String number;
   TextStyle hospitalStyle = GoogleFonts.poppins(
     fontWeight: FontWeight.bold,
     fontSize: 18,
@@ -44,6 +46,8 @@ class _MapDispState extends State<MapDisp> {
     var p = request['lat'];
     var markerIdVal = request['name'];
     bool isPresent = request['isPresent'];
+    var mobile = request['number'];
+    var specialities = request['specialities'];
     final MarkerId markerId = MarkerId(markerIdVal);
     final Marker marker = Marker(
       onTap: () {
@@ -52,6 +56,8 @@ class _MapDispState extends State<MapDisp> {
           _hospitalSelected = markerIdVal;
           pos = p;
           isAvailable = isPresent;
+          number = mobile;
+          speciality = specialities;
         });
       },
       icon: isPresent
@@ -223,7 +229,7 @@ class _MapDispState extends State<MapDisp> {
                                 Spacer(flex: 6),
                                 IconButton(
                                   onPressed: () {
-                                    launchUrl(Uri.parse("tel:7397665588"));
+                                    launchUrl(Uri.parse("tel:${number}"));
                                   },
                                   icon: Icon(
                                     FlutterRemix.phone_fill,
@@ -260,7 +266,7 @@ class _MapDispState extends State<MapDisp> {
                                 Spacer(flex: 6),
                                 IconButton(
                                   onPressed: () {
-                                    launchUrl(Uri.parse("tel:7397665588"));
+                                    launchUrl(Uri.parse("tel:${number}"));
                                   },
                                   icon: Icon(
                                     FlutterRemix.phone_fill,
@@ -282,60 +288,147 @@ class _MapDispState extends State<MapDisp> {
                                 // Spacer(flex:1),
                               ],
                             ),
-                      // Text('Specialities:'),
-                      // Expanded(
-                      //   child: GridView.count(
-                      //     childAspectRatio: 2,
-                      //     crossAxisCount: 2,
-                      //     children: [
-                      //       Padding(
-                      //         padding: const EdgeInsets.all(8.0),
-                      //         child: Container(
-                      //           height: 50,
-                      //           decoration: BoxDecoration(
-                      //               borderRadius: BorderRadius.circular(12),
-                      //               color: Colors.green[100]),
-                      //           child: Padding(
-                      //             padding: const EdgeInsets.all(8.0),
-                      //             child: Row(
-                      //               mainAxisAlignment:
-                      //                   MainAxisAlignment.spaceBetween,
-                      //               children: [
-                      //                 Text('ICU',
-                      //                     style:
-                      //                         TextStyle(color: Colors.green)),
-                      //                 Icon(FlutterRemix.add_box_line,
-                      //                     color: Colors.green)
-                      //               ],
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       Padding(
-                      //         padding: const EdgeInsets.all(8.0),
-                      //         child: Container(
-                      //           height: 50,
-                      //           decoration: BoxDecoration(
-                      //               borderRadius: BorderRadius.circular(12),
-                      //               color: Colors.red[100]),
-                      //           child: Padding(
-                      //             padding: const EdgeInsets.all(8.0),
-                      //             child: Row(
-                      //               mainAxisAlignment:
-                      //                   MainAxisAlignment.spaceBetween,
-                      //               children: [
-                      //                 Text('Cardiologist',
-                      //                     style: TextStyle(color: Colors.red)),
-                      //                 Icon(FlutterRemix.heart_pulse_line,
-                      //                     color: Colors.red)
-                      //               ],
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       )
-                      //     ],
-                      //   ),
-                      // )
+                      Text('Specialities:'),
+                      Expanded(
+                        child: GridView.count(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          physics: NeverScrollableScrollPhysics(),
+                          childAspectRatio: 3,
+                          crossAxisCount: 2,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: speciality[0]
+                                        ? Colors.green[100]
+                                        : Colors.red[100]),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('ICU',
+                                          style: TextStyle(
+                                              color: speciality[0]
+                                                  ? Colors.green
+                                                  : Colors.red)),
+                                      Icon(
+                                          speciality[0]
+                                              ? FlutterRemix.check_fill
+                                              : FlutterRemix.close_fill,
+                                          color: speciality[0]
+                                              ? Colors.green
+                                              : Colors.red)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: speciality[1]
+                                        ? Colors.green[100]
+                                        : Colors.red[100]),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Cardiology',
+                                          style: TextStyle(
+                                              color: speciality[1]
+                                                  ? Colors.green
+                                                  : Colors.red)),
+                                      Icon(
+                                          speciality[1]
+                                              ? FlutterRemix.check_fill
+                                              : FlutterRemix.close_fill,
+                                          color: speciality[1]
+                                              ? Colors.green
+                                              : Colors.red)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: speciality[2]
+                                        ? Colors.green[100]
+                                        : Colors.red[100]),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Chemotherapy',
+                                          style: TextStyle(
+                                              color: speciality[2]
+                                                  ? Colors.green
+                                                  : Colors.red)),
+                                      Icon(
+                                          speciality[2]
+                                              ? FlutterRemix.check_fill
+                                              : FlutterRemix.close_fill,
+                                          color: speciality[2]
+                                              ? Colors.green
+                                              : Colors.red)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: speciality[3]
+                                        ? Colors.green[100]
+                                        : Colors.red[100]),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Isolation Ward',
+                                          style: TextStyle(
+                                              color: speciality[3]
+                                                  ? Colors.green
+                                                  : Colors.red)),
+                                      Icon(
+                                          speciality[3]
+                                              ? FlutterRemix.check_fill
+                                              : FlutterRemix.close_fill,
+                                          color: speciality[3]
+                                              ? Colors.green
+                                              : Colors.red)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // SizedBox(height: 50)
                     ],
                   ),
                 ),
